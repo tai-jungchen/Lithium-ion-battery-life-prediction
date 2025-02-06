@@ -74,6 +74,7 @@ def data_loader(batch_date):
     with open(output_name, 'wb') as fp:
         pickle.dump(bat_dict, fp)
 
+
 if __name__ == '__main__':
     # data_loader("2017-05-12")
     # data_loader("2017-06-30")
