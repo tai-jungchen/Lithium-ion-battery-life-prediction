@@ -11,7 +11,6 @@ from sklearn.tree import DecisionTreeRegressor
 from sklearn.neural_network import MLPRegressor
 from sklearn.svm import SVR
 from sklearn.model_selection import train_test_split, KFold, cross_val_score, GridSearchCV
-import xgboost as xgb
 from sklearn.metrics import mean_squared_error, mean_absolute_error, mean_absolute_percentage_error, r2_score
 from xgboost import XGBRegressor
 
@@ -57,7 +56,7 @@ def main(models):
         output.iloc[idx, 8] = mean_absolute_error(y_test_sec, y_pred_sec)
         output.iloc[idx, 9] = mean_absolute_percentage_error(y_test_sec, y_pred_sec)
 
-    output.to_csv("result1.csv")
+    output.to_csv("result.csv")
 
 
 if __name__ == "__main__":
