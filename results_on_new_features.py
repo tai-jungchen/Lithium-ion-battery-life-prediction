@@ -28,7 +28,9 @@ def main(models):
     X_test_prim, y_test_prim = prim_test_df.set_index('cell_id').iloc[:, :-1], prim_test_df.set_index('cell_id').iloc[:, -1]
     X_test_sec, y_test_sec = sec_test_df.set_index('cell_id').iloc[:, :-1], sec_test_df.set_index('cell_id').iloc[:, -1]
 
-    output = pd.DataFrame(columns=['model', 'train_rmse', 'prim_test_rmse', 'sec_test_rmse'])
+    output = pd.DataFrame(columns=['model', 'train_rmse', 'train_mae', 'train_mape',
+                                   'prim_test_rmse', 'prim_test_mae', 'prim_test_mape',
+                                   'sec_test_rmse', 'sec_test_mae', 'sec_test_mape'])
     output.iloc[:, 0] = models
 
     # model
@@ -41,32 +43,21 @@ def main(models):
         y_pred_sec = model.predict(X_test_sec)
 
         # print('Training')
-        rmse = np.sqrt(mean_squared_error(y_train, y_pred_train))
-        output.iloc[idx, 1] = rmse
-        # mae = mean_absolute_error(y_train, y_pred_train)
-        # mape = mean_absolute_percentage_error(y_train, y_pred_train)
-        # print(f"RMSE: {rmse:.4f}")
-        # print(f"MAE: {mae:.4f}")
-        # print(f"MAPE: {mape:.4%}")
+        output.iloc[idx, 1] = np.sqrt(mean_squared_error(y_train, y_pred_train))
+        output.iloc[idx, 2] = mean_absolute_error(y_train, y_pred_train)
+        output.iloc[idx, 3] = mean_absolute_percentage_error(y_train, y_pred_train)
 
         # print('\nPrimary Testing')
-        rmse = np.sqrt(mean_squared_error(y_test_prim, y_pred_prim))
-        output.iloc[idx, 2] = rmse
-        # mae = mean_absolute_error(y_test_prim, y_pred_prim)
-        # mape = mean_absolute_percentage_error(y_test_prim, y_pred_prim)
-        # print(f"RMSE: {rmse:.4f}")
-        # print(f"MAE: {mae:.4f}")
-        # print(f"MAPE: {mape:.4%}")
+        output.iloc[idx, 4] = np.sqrt(mean_squared_error(y_test_prim, y_pred_prim))
+        output.iloc[idx, 5] = mean_absolute_error(y_test_prim, y_pred_prim)
+        output.iloc[idx, 6] = mean_absolute_percentage_error(y_test_prim, y_pred_prim)
 
         # print('\nSecondary Testing')
-        rmse = np.sqrt(mean_squared_error(y_test_sec, y_pred_sec))
-        output.iloc[idx, 3] = rmse
-        # mae = mean_absolute_error(y_test_sec, y_pred_sec)
-        # mape = mean_absolute_percentage_error(y_test_sec, y_pred_sec)
-        # print(f"RMSE: {rmse:.4f}")
-        # print(f"MAE: {mae:.4f}")
-        # print(f"MAPE: {mape:.4%}")
-    output.to_csv("result.csv")
+        output.iloc[idx, 7] = np.sqrt(mean_squared_error(y_test_sec, y_pred_sec))
+        output.iloc[idx, 8] = mean_absolute_error(y_test_sec, y_pred_sec)
+        output.iloc[idx, 9] = mean_absolute_percentage_error(y_test_sec, y_pred_sec)
+
+    output.to_csv("result1.csv")
 
 
 if __name__ == "__main__":
