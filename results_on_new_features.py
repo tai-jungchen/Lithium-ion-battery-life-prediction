@@ -10,9 +10,9 @@ from sklearn.linear_model import LinearRegression
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.neural_network import MLPRegressor
 from sklearn.svm import SVR
-from sklearn.model_selection import train_test_split, KFold, cross_val_score, GridSearchCV
 from sklearn.metrics import mean_squared_error, mean_absolute_error, mean_absolute_percentage_error, r2_score
 from xgboost import XGBRegressor
+import shap
 
 
 def main(models):
@@ -56,7 +56,12 @@ def main(models):
         output.iloc[idx, 8] = mean_absolute_error(y_test_sec, y_pred_sec)
         output.iloc[idx, 9] = mean_absolute_percentage_error(y_test_sec, y_pred_sec)
 
-    output.to_csv("result.csv")
+        if isinstance(model, GradientBoostingRegressor) or isinstance(model, RandomForestRegressor):
+            explainer = shap.Explainer(model, X_train)
+            shap_values = explainer(X_test_prim)
+            shap.summary_plot(shap_values, X_test_prim, plot_type="bar", max_display=10)
+
+    # output.to_csv("result.csv")
 
 
 if __name__ == "__main__":
